@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# AI model weights
+*.pt
+*.pth
+*.onnx
+*.pkl
+ai/training/data/
+
+# Firebase
+firebase-credentials.json
+serviceAccountKey.json
+*-firebase-adminsdk-*.json
+
+# OpenCV / video
+*.mp4
+*.avi
+*.mov
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.docker/
