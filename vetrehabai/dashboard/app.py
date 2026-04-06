@@ -1,30 +1,30 @@
-import streamlit as st                                                                                                                
-import sys                                                                                                                            
+import streamlit as st
+import sys
+import pandas as pd
 sys.path.append("../backend")
-from data.firebase_client import get_sessions
-from data.synthetic_generator import generate_patient_data
-import random
-from datetime import datetime, timedelta
+from data.synthetic_generator import generate_multiple_sessions
 
-#title
 st.title("VetRehabAI - Therapist Dashboard")
 
-#sidebar- patient selector
 st.sidebar.header("Patient Selection")
 patient_id = st.sidebar.text_input("Enter Patient ID", value="patient_001")
 
-#load and display data
-st.subheader(f"Session Data for {patient_id}")
-data = get_sessions(patient_id)
-if not data:
-    st.warning("No data found. Generating synthetic data...")
-    data = generate_patient_data(patient_id)
-st.json(data)
+sessions = generate_multiple_sessions(patient_id)
+df = pd.DataFrame(sessions)
 
-#add chart for joint angle
-st.subheader("Joint Angle")
-st.metric(label="Joint Angle (degrees)", value=data.get("joint_angle", "N/A"))
+st.subheader(f"Sessions for {patient_id}")
+st.dataframe(df)
 
-#pain level
-st.subheader("Pain Level")
-st.metric(label="Pain Level (0-10)", value=data.get("pain_level", "N/A"))
+st.subheader("Joint Angle Over Time")
+st.line_chart(df.set_index("session_number")["joint_angle"])
+
+st.subheader("Pain Level Over Time")
+st.line_chart(df.set_index("session_number")["pain_level"])
+
+st.subheader("Balance Score Over Time")
+st.line_chart(df.set_index("session_number")["balance_score"])
+
+col1, col2, col3 = st.columns(3)
+col1.metric("Avg Joint Angle", round(df["joint_angle"].mean(), 2))
+col2.metric("Avg Pain Level", round(df["pain_level"].mean(), 2))
+col3.metric("Avg Balance Score", round(df["balance_score"].mean(), 2))
