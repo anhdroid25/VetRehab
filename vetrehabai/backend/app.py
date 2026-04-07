@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask, request, jsonify
 import cv2
 from cv_pipeline.yolo_detector import YOLODetector

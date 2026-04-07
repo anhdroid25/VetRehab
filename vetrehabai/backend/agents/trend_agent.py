@@ -5,5 +5,6 @@ def create_trend_agent():
         role = "Rehabilitation Trend Analyst",
         goal = "Track and analyze patient progress trends over multiple sessions",
         backstory = "A data-driven specialist in rehabilitation outcomes who identifies patterns in patient recovery data to optimize treatment plans",
+        llm="gpt-4o-mini",
         verbose = True
     )
