@@ -3,9 +3,9 @@ from agents.assessment_agent import create_assessment_agent
 from agents.trend_agent import create_trend_agent
 from agents.alert_agent import create_alert_agent
 from agents.report_agent import create_report_agent
-from data.firebase_client import get_sessions
 
-def run_crew(payload):                                                                                                                 assessment = create_assessment_agent()
+def run_crew(payload):
+    assessment = create_assessment_agent()
     trend = create_trend_agent()                                                                                                 
     alert = create_alert_agent()
     report = create_report_agent()

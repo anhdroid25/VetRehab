@@ -16,3 +16,10 @@ def get_sessions(patient_id):
 def get_all_patients():
     docs = db.collection("patients").stream()
     return [doc.id for doc in docs]
+
+def get_patient_by_name_dob(name, dob):
+    docs = db.collection("patients").where("name", "==", name).where("dob", "==", dob).stream()
+    
+    for doc in docs:
+        return doc.id
+    return None

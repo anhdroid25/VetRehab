@@ -7,7 +7,7 @@ from cv_pipeline.yolo_detector import YOLODetector
 from cv_pipeline.pose_tracker import PoseTracker
 from cv_pipeline.exercise_analyzer import ExerciseAnalyzer
 from agents.crew import run_crew
-from data.firebase_client import get_sessions
+from data.firebase_client import get_patient_by_name_dob, get_sessions
 
 app = Flask(__name__)
 
@@ -54,5 +54,15 @@ def analyze():
     result = run_crew(payload)
     return jsonify({"result": str(result)})
 
+@app.route("/patient", methods=["GET"])
+def patient():
+    name = request.args.get("name")
+    dob = request.args.get("dob")
+    if not name or not dob:
+        return jsonify({"error": "name and dob are required"}), 400
+    patient_id = get_patient_by_name_dob(name, dob)
+    if not patient_id:
+        return jsonify({"error": "patient not found"}), 404
+    return jsonify({"patient_id": patient_id})
 if __name__ == "__main__":
     app.run(debug=True)
