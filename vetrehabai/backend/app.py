@@ -7,6 +7,7 @@ from cv_pipeline.yolo_detector import YOLODetector
 from cv_pipeline.pose_tracker import PoseTracker
 from cv_pipeline.exercise_analyzer import ExerciseAnalyzer
 from agents.crew import run_crew
+from data.firebase_client import get_sessions
 
 app = Flask(__name__)
 
@@ -41,7 +42,16 @@ def start():
 @app.route("/analyze", methods=["POST"])
 def analyze():
     data= request.get_json()
-    result = run_crew(data)
+    patient_id = data.get("patient_id")
+    if not patient_id:
+        return jsonify({"error": "patient_id is required"}), 400
+    history = get_sessions(patient_id)
+    payload = {
+        "patient_id": patient_id,
+        "current_session": data,
+        "session_history": history
+    }
+    result = run_crew(payload)
     return jsonify({"result": str(result)})
 
 if __name__ == "__main__":
