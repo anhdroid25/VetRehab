@@ -1,0 +1,22 @@
+# Web framework
+flask>=3.0.0
+gunicorn>=21.2.0
+
+# Computer vision
+opencv-python-headless>=4.9.0
+mediapipe==0.10.14
+ultralytics>=8.0.0
+
+# Multi-agent
+crewai>=0.28.0
+
+# Firebase
+firebase-admin>=6.4.0
+
+# Dashboard
+streamlit>=1.32.0
+
+# Utilities
+python-dotenv>=1.0.0
+numpy>=1.26.0
+pandas>=2.2.0
