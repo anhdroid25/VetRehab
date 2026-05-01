@@ -7,24 +7,27 @@ from data.synthetic_generator import generate_multiple_sessions
 st.title("VetRehabAI - Therapist Dashboard")
 
 st.sidebar.header("Patient Selection")
-patient_id = st.sidebar.text_input("Enter Patient ID", value="patient_001")
+patient_options = [f"patient_{str(i).zfill(3)}" for i in range(1, 11)]
+selected_patients = st.sidebar.multiselect("Select Patients", patient_options, default=["patient_001"])
 
-sessions = generate_multiple_sessions(patient_id)
-df = pd.DataFrame(sessions)
+if not selected_patients:
+    st.warning("Select at least one patient.")
+    st.stop()
 
-st.subheader(f"Sessions for {patient_id}")
-st.dataframe(df)
+dfs = {
+    pid: pd.DataFrame(generate_multiple_sessions(pid)).set_index("session_number")
+    for pid in selected_patients
+}
 
-st.subheader("Joint Angle Over Time")
-st.line_chart(df.set_index("session_number")["joint_angle"])
+for metric, label in [("joint_angle", "Joint Angle"), ("pain_level", "Pain Level"), ("balance_score", "Balance Score")]:
+    comparison = pd.DataFrame({pid: dfs[pid][metric] for pid in selected_patients})
+    st.subheader(f"{label} Over Time")
+    st.line_chart(comparison)
 
-st.subheader("Pain Level Over Time")
-st.line_chart(df.set_index("session_number")["pain_level"])
-
-st.subheader("Balance Score Over Time")
-st.line_chart(df.set_index("session_number")["balance_score"])
-
-col1, col2, col3 = st.columns(3)
-col1.metric("Avg Joint Angle", round(df["joint_angle"].mean(), 2))
-col2.metric("Avg Pain Level", round(df["pain_level"].mean(), 2))
-col3.metric("Avg Balance Score", round(df["balance_score"].mean(), 2))
+st.subheader("Averages")
+cols = st.columns(len(selected_patients))
+for col, pid in zip(cols, selected_patients):
+    col.markdown(f"**{pid}**")
+    col.metric("Avg Joint Angle", round(dfs[pid]["joint_angle"].mean(), 2))
+    col.metric("Avg Pain Level", round(dfs[pid]["pain_level"].mean(), 2))
+    col.metric("Avg Balance Score", round(dfs[pid]["balance_score"].mean(), 2))
