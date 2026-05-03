@@ -2,21 +2,20 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from flask import Flask, request, jsonify
-import cv2
-from cv_pipeline.yolo_detector import YOLODetector
-from cv_pipeline.pose_tracker import PoseTracker
-from cv_pipeline.exercise_analyzer import ExerciseAnalyzer
 from agents.crew import run_crew
 from data.firebase_client import get_patient_by_name_dob, get_sessions
 
 app = Flask(__name__)
 
-detector = YOLODetector()
-tracker = PoseTracker()
-analyzer = ExerciseAnalyzer()
-
 @app.route("/start")
 def start():
+    import cv2
+    from cv_pipeline.yolo_detector import YOLODetector
+    from cv_pipeline.pose_tracker import PoseTracker
+    from cv_pipeline.exercise_analyzer import ExerciseAnalyzer
+    detector = YOLODetector()
+    tracker = PoseTracker()
+    analyzer = ExerciseAnalyzer()
     cap = cv2.VideoCapture(0)
     while True:
         ret, frame = cap.read()
