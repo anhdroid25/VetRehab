@@ -10,8 +10,17 @@ ultralytics>=8.0.0
 # Multi-agent
 crewai>=0.28.0
 
-# Firebase
-firebase-admin>=6.4.0
+# Firebase - pinned to avoid pip backtracking
+firebase-admin==6.5.0
+google-api-core==2.25.1
+google-cloud-firestore==2.21.0
+google-cloud-storage==3.1.1
+
+# OpenTelemetry - pinned to match crewai exactly
+opentelemetry-api==1.34.0
+opentelemetry-sdk==1.34.0
+opentelemetry-exporter-otlp-proto-http==1.34.0
+opentelemetry-exporter-otlp-proto-grpc==1.34.0
 
 # Utilities
 python-dotenv>=1.0.0
