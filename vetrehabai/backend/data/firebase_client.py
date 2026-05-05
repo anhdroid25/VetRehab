@@ -1,8 +1,16 @@
+import os
+import json
+import base64
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-cred = credentials.Certificate("data/serviceAccountKey.json")
-firebase_admin.initialize_app(cred)
+if not firebase_admin._apps:
+    raw = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+    if not raw:
+        raise RuntimeError("FIREBASE_SERVICE_ACCOUNT env var is not set")
+    service_account = json.loads(base64.b64decode(raw).decode("utf-8"))
+    cred = credentials.Certificate(service_account)
+    firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
