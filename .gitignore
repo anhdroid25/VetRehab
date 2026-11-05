@@ -50,3 +50,6 @@ Thumbs.db
 
 # Docker
 .docker/
+
+#data
+data/raw/
